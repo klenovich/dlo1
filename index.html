@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Dungleon</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#be4fae">
+    <meta name="apple-mobile-web-app-title" content="Dungleon">
+    <meta name="application-name" content="Dungleon">
+    <meta name="msapplication-TileColor" content="#222222">
+    <meta name="theme-color" content="#222222">
+
+    <script>
+    if (window.location.protocol == 'http:' && !(location.hostname === "localhost")) {
+      window.location.href = window.location.href.replace('http:', 'https:');
+    }
+    </script>
+
+    <style>
+      /* W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */
+      html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+      /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
+      html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
+      article,aside,details,figcaption,figure,footer,header,main,menu,nav,section{display:block}summary{display:list-item}
+      audio,canvas,progress,video{display:inline-block}progress{vertical-align:baseline}
+      audio:not([controls]){display:none;height:0}[hidden],template{display:none}
+      a{background-color:transparent}a:active,a:hover{outline-width:0}
+      abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}
+      b,strong{font-weight:bolder}dfn{font-style:italic}mark{background:#ff0;color:#000}
+      small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+      sub{bottom:-0.25em}sup{top:-0.5em}figure{margin:1em 40px}img{border-style:none}
+      code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}hr{box-sizing:content-box;height:0;overflow:visible}
+      button,input,select,textarea,optgroup{font:inherit;margin:0}optgroup{font-weight:bold}
+      button,input{overflow:visible}button,select{text-transform:none}
+      button,[type=button],[type=reset],[type=submit]{-webkit-appearance:button}
+      button::-moz-focus-inner,[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner{border-style:none;padding:0}
+      button:-moz-focusring,[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring{outline:1px dotted ButtonText}
+      fieldset{border:1px solid #c0c0c0;margin:0 2px;padding:.35em .625em .75em}
+      legend{color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}
+      [type=checkbox],[type=radio]{padding:0}
+      [type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}
+      [type=search]{-webkit-appearance:textfield;outline-offset:-2px}
+      [type=search]::-webkit-search-decoration{-webkit-appearance:none}
+      ::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}
+      /* End extract */
+    </style>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=Roboto:wght@400;700&display=swap');
+
+      html {
+        height: 100%;
+        overflow: hidden;
+        touch-action: none;
+      }
+
+      body {
+        text-align: center;
+        color: #222;
+        height:100%;
+        font-family: 'Roboto', sans-serif;
+        overflow: hidden;
+        background-color: #fdfcfd;
+      }
+      body.dark {
+        background-color:#000000;
+        color: #ddd;
+      }
+
+      h1 {
+        cursor:default;
+        margin: 5px auto 0;
+        padding-right:30px;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-weight: 400;
+        font-size: 28px;
+      }
+      @media only screen and (min-width: 768px) {
+        h1 {
+          font-size: 42px;
+        }
+      }
+      h1 .highlighted-letter {
+        color: #be4fae;
+      }
+      .dark h1 {
+        color: #e6e6e6;
+      }
+      .dark h1 .highlighted-letter {
+        color: #ef6fe1;
+      }
+
+      h2 {
+        cursor:default;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-weight: 400;
+        font-size: 25px;
+        line-height: 1;
+      }
+
+      a, a:visited {
+        color:#be4fae;
+        text-decoration: none;
+      }
+      a:hover {
+        color:#51c261;
+        text-decoration: none;
+      }
+
+      #puzzle-number {
+        color: #939399;
+        font-size: 67%;
+        display: inline-block;
+      }
+      .dark #puzzle-number {
+        color: #d0c6b6;
+      }
+
+      #page-container {
+        width: 100%;
+        height: 100%;
+      }
+
+      #header {
+        text-transform: uppercase;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .round-button {
+        border: 0 none;
+        background-color: #939399;
+        box-shadow: 2px 3px 0 #000000;
+        color: #ffffff;
+        text-align: center;
+        padding: 0;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        height: 27px;
+        width: 27px;
+        border-radius: 50px;
+      }
+      @media only screen and (min-width: 768px) {
+        .round-button {
+          height: 45px;
+          width: 45px;
+        }
+      }
+      .dark .round-button {
+        background-color: #687176;
+      }
+      .round-button:hover {
+        background-color: #b8b8b8;
+      }
+      .dark .round-button:hover {
+        background-color: #596064;
+      }
+      .round-button:active {
+        box-shadow: 1px 1px 0 #000000;
+        transform: translate(1px, 2px);
+      }
+
+      #settings-button {
+        position: absolute;
+        top: 10px;
+        right: 50px;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-size: 18px;
+      }
+      @media only screen and (min-width: 768px) {
+        #settings-button {
+          right: 68px;
+        }
+      }
+      #help-button {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-size: 18px;
+      }
+      @media only screen and (min-width: 768px) {
+        #help-button {
+          font-size: 30px;
+        }
+      }
+
+      .spells {
+        background-image: url('img/spell-highlight.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #b9b7bd;
+        width: 30px;
+        height: 30px;
+      }
+      .spells:disabled {
+        opacity: 0.25;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+      .spell-found {
+        position: absolute;
+        top: 50%;
+        left: 55%;
+        width: 50%;
+        height: 50%;
+        border-radius: 100%;
+        /* box-shadow: 0px 0px 30px #51c261; */
+        /* background-color: #eee; */
+        background-image: url('img/spell-highlight.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 45%;
+        image-rendering: -webkit-optimize-contrast;
+      }
+
+      #hud-container {
+        background-image: url('img/stats-container.png');
+        background-size: 100% 100%;
+        margin-bottom: 2.8%;
+        width: 100%;
+      }
+      #hud {
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+      #hud-container .info {
+        display: flex;
+        align-items: center;
+        color:#939399;
+        padding:0;
+      }
+      .dark #hud-container .info {
+        color: #d0c6b6;
+      }
+      #hud-container .info img {
+        height: 100%;
+        aspect-ratio: 1;
+        image-rendering: -webkit-optimize-contrast;
+      }
+      #hud-container .info .value {
+        font-size:16px;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-weight:400;
+        padding:2px;
+      }
+
+      #hud-left-container {
+        display: flex;
+        position: absolute;
+        left:2.4%;
+        align-items: center;
+      }
+
+      #hearts-container {
+        /* height: 50%; */
+
+      }
+      .heart {
+        /* width:28px; */
+        /* height:24px; */
+        /* height: 100%; */
+        /* aspect-ratio: 1.07692308; */
+        display:inline-block;
+        position:relative;
+        margin-right:2px;
+      }
+      .heart .image {
+        position:absolute;
+        top:0;
+        left:0;
+        background-size: 100% 100%;
+      }
+      .heart .full {
+        background-image: url('img/stats-heart-full.png');
+        width:100%;
+        height:100%;
+        z-index: 2;
+      }
+      .heart .half {
+        background-image: url('img/stats-heart-half.png');
+        width:100%;
+        height:100%;
+        z-index: 1;
+      }
+      .heart .empty {
+        background-image: url('img/stats-heart-empty.png');
+        width:100%;
+        height:100%;
+        z-index: 0;
+      }
+      #hard-mode-badge {
+        background-image:url("img/stats-hard-red.png");
+        background-size: 100% 100%;
+        margin-left: 4px;
+        margin-bottom:3px;
+      }
+      #results-hard-mode-badge {
+        background-image:url("img/stats-hard-red.png");
+        background-size: 100% 100%;
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        margin-right: -15px;
+      }
+      #info-container {
+        display: flex;
+        height: 90%;
+        position: absolute;
+        right: 1.5%;
+      }
+
+      #main {
+        display: flex;
+        flex-direction:column;
+        justify-content:space-between;
+        height:100%;
+        box-shadow: 0 7px 15px #efedf2;
+        max-width:1100px;
+        margin:0 auto;
+        background-color: #ffffff;
+      }
+      .dark #main {
+        background-color: #1e2122;
+        box-shadow: 0 7px 15px #000000;
+      }
+
+      .overlay-container {
+        position: fixed;
+        width:100%;
+        height:100%;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+        background: rgb(255 255 255 / 40%);
+      }
+      .dark .overlay-container {
+        background: rgb(0 0 0 / 60%);
+      }
+      .overlay {
+        max-width: min(500px, 92%);
+        overflow-y: auto;
+        margin: 0 auto;
+        position: relative;
+        top: 45px;
+        max-height: 90%;
+        background: #f6f5f7;
+        box-shadow: 0 0 30px rgb(30 26 35 / 35%);
+        padding: 8px 15px 18px 15px;
+        font-size:85%;
+        border-radius: 5px;
+      }
+      @media only screen and (min-width: 768px) {
+        .overlay {
+          font-size:95%;
+        }
+      }
+      .dark .overlay {
+        background: #1e2122
+      }
+      .overlay p {
+        margin: 12px 5px;
+      }
+
+      #instructions-container {
+      }
+      #instructions {
+      }
+      #instructions h2 {
+      }
+      #instructions img {
+        max-width: 80%;
+      }
+      #instructions .button {
+        width: 90%;
+        max-width: none;
+        margin:1em auto;
+        background-color:#d2d0d6;
+        display: block;
+        font-weight: bold;
+      }
+      .dark #instructions .button {
+        background-color: #505559;
+        color: #fffffb;
+      }
+      #instructions .instructions-hint-container {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
+      #instructions .instructions-hint {
+        font-size: 105%;
+        font-weight: bold;
+        /* border: 2px solid #e1dfe6; */
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        padding: 3px 7px;;
+        margin: 12px auto;
+        width: 90%;
+        background: #ffffff;
+        border-radius: 2px;
+      }
+      .dark #instructions .instructions-hint {
+        background: #0c0d0e;
+      }
+
+      #game-container {
+        margin: 0 auto;
+      }
+      #grid-container {
+        /* align-items: center; */
+        /* display: flex; */
+        /* flex-direction: column; */
+        /* flex-grow: 1; */
+        /* flex-shrink: 50; */
+        /* justify-content: center; */
+        /* overflow-y: auto; */
+      }
+
+      #grid {
+        display: grid;
+        flex-grow: 0;
+        /* gap: 6px 0; */
+        align-content: center;
+        /* justify-content: center; */
+        /* width: 408px; */
+        /* width: 36vh; */
+        /* width:100%; */
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+      }
+
+      .cell {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        /* aspect-ratio: 0.95; */
+        position:relative;
+        cursor: default;
+        background-image: url('img/slot_empty.png');
+        background-size: 100% 100%;
+        image-rendering: -webkit-optimize-contrast;
+        /* border: 2px solid #d2d5d5; */
+        /* border-bottom: 3px solid #d2d5d5; */
+        /* border-radius: 4px; */
+      }
+      .cell.wrong {
+        background-image:url('img/slot_red.png');
+      }
+      .cell.wrong .img {
+        filter: grayscale(70%) brightness(65%);
+      }
+      .cell.contains {
+        background-image:url('img/slot_yellow.png');
+      }
+      .cell.correct {
+        background-image:url('img/slot_green.png');
+      }
+
+      .colorblind .cell.wrong {
+        background-image:url('img/slot_red_colorblind.png');
+      }
+      .colorblind .cell.wrong .img {
+        filter: grayscale(100%) brightness(55%);
+      }
+      .colorblind .cell.contains {
+        background-image:url('img/slot_yellow_colorblind.png');
+      }
+      .colorblind .cell.correct {
+        background-image:url('img/slot_green_colorblind.png');
+      }
+
+      .cell .emoji {
+        font-size: 28px;
+        line-height: 58px;
+      }
+      .cell .img {
+        /* width:64px; */
+        /* height:64px; */
+        /* width:80%; */
+        height:80%;
+        aspect-ratio: 1;
+        background-size: 100% 100%;
+        transform: translateY(-2.5%);
+        image-rendering: -webkit-optimize-contrast;
+      }
+
+      .colorblind .cell .img {
+        transform: scale(90%) translate(0, -2.5%);
+        image-rendering: auto !important;
+      }
+
+      .cell .id-label {
+        position:absolute;
+        top: 2px;
+        left: 5px;
+        font-weight: bold;
+        color: #ffffff;
+        font-size: 10px;
+        font-weight: bold;
+        text-shadow: 1px 1px 1px #000000;
+        z-index: 1;
+      }
+      .cell .name-label {
+        position: absolute;
+        bottom: 4px;
+        left: 5px;
+        color: #ffffff;
+        font-size: 8px;
+        font-weight: bold;
+        text-shadow: 1px 1px 1px #000000;
+        z-index: 1;
+      }
+      .cell .has-more {
+        position:absolute;
+        right: 5px;
+        top: 1px;
+        font-size: 18px;
+        color:#fff;
+        text-shadow: 0px 2px 0 rgb(1 1 1 / 80%), 0 2px 7px #ae52a1, 0 0 15px #ae52a1;
+        font-weight: bold;
+        z-index: 1;
+        line-height: 1;
+      }
+
+      .row {
+        display:flex;
+        justify-content: space-between;
+        /* gap: 0 2%; */
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: auto;
+      }
+
+      #buttons-container {
+        padding: 5px 0;
+        width: 98%;
+        margin: 0 auto;
+      }
+
+      #bottom-container {
+        display: flex;
+        flex-direction:column;
+        text-align: center;
+        width: 100%;
+      }
+
+      .buttons-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .button {
+        flex: 1;
+        height: 55px;
+        max-width: 70px;
+        margin: 2px;
+        padding: 0 2px;
+        background-color: #e1dfe6;
+        color: #222;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        image-rendering: pixelated;
+        image-rendering: -webkit-optimize-contrast;
+        cursor: pointer;
+        overflow: hidden;
+      }
+      @media only screen and (min-width: 768px) {
+        .button {
+          height: 60px;
+        }
+      }
+      .dark .button {
+        color: #fffffb;
+        background-color: #323638;
+      }
+      .small-image-sprite {
+        height:32px;
+        width:32px;
+        background-image: url('img/sprites.png?20230203');
+        margin: 0 auto 2px;
+      }
+
+      #buttons-container .button {
+        background-position: center;
+        background-size: 32px 32px;
+        background-repeat: no-repeat;
+      }
+
+      .button img {
+        margin: 8px auto;
+      }
+
+      .backspace, .enter {
+        /* max-width: fit-content; */
+        background-color: #b9b7bd;
+        padding: 0 5px;
+      }
+      .dark .backspace, .dark .enter {
+        background-color: #505559;
+      }
+
+      .button.item {
+        max-width: none;
+        width: 52px;
+        height: 40px;
+        margin-top: 11px;
+        background-color: #c9f0f5;
+      }
+      .button.wrong {
+        background-color:#ae52a1;
+      }
+      .button.wrong .small-image-sprite {
+        filter: grayscale(70%) brightness(65%);
+      }
+      .button.contains {
+        background-color:#c6b62a;
+      }
+      .button.contains .small-image-sprite {
+        filter: none;
+      }
+      .button.correct {
+        background-color:#51c261;
+      }
+      .button.correct .small-image-sprite {
+        filter: none;
+      }
+
+      .colorblind .button.wrong {
+        background-color:#727272;
+        backdrop-filter: grayscale(85%) brightness(45%);
+      }
+      .colorblind .button.contains {
+        background-color:#62c1f7;
+        backdrop-filter: none;
+      }
+      .colorblind .button.correct {
+        background-color:#ff7931;
+        backdrop-filter: none;
+      }
+
+      #results h2 {
+        margin: 14px auto 12px auto;
+      }
+      #results .victory h2, .stats .value.victory {
+        color: #51c261;
+      }
+      .colorblind #results .victory h2, .colorblind .stats .value.victory {
+        color: #ff7931;
+      }
+      #results .defeated h2, .stats .value.defeated {
+        color: #ae52a1;
+      }
+      .colorblind #results .defeated h2, .colorblind  .stats .value.defeated {
+        color: #727272;
+      }
+
+      #result-answer-container {
+        padding-bottom: 18px;
+      }
+      #result-answer-container.defeated {
+        filter: grayscale(45%);
+      }
+      #result-answer-container .row {
+        gap: 0 5px;
+        justify-content: center;
+      }
+
+      #stats-outer-container {
+        pointer-events: none;
+      }
+      .stats-container {
+        margin-bottom: 14px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .stat {
+        color: #4c4c4f;
+      }
+      .dark .stat {
+        color: #d0c6b6;
+      }
+      #stats-plays {
+        margin:0 auto;
+        width: 85%;
+      }
+      #stats-spoils {
+        margin: 7px auto 0;
+        width: 60%;
+      }
+      .stats p, .stats-container p {
+        margin: 0;
+        cursor: default;
+        font-size: 15px;
+      }
+      .stats .stat {
+        flex-grow: 1;
+      }
+      .stats .value, .stat .value {
+        font-family: 'Bowlby One SC', sans-serif;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 1;
+        cursor: default;
+      }
+      .stat .bonus-counter {
+        display: inline-block;
+        font-size: 45%;
+        position: relative;
+        bottom: 3px;
+        margin: 0 -15px 0 5px;
+      }
+      .stat .bonus-counter-value {
+        display: inline-block;
+      }
+      .stat .bonus-counter-hard-mode-badge-icon {
+        background-image:url("img/stats-hard-red.png");
+        background-size: 100% 100%;
+        width: 11px;
+        height: 11px;
+        display: inline-block;
+        margin: 0 1px -1px 1px;
+      }
+      .share svg{
+        fill:#ffffff;
+        margin-left: 3px;
+        max-height: 40%;
+      }
+      .share.button {
+        width: 80%;
+        max-width: none;
+        margin:18px auto;
+        background-color:#51c261;
+        display: block;
+        font-family: 'Bowlby One SC', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+        text-transform: uppercase;
+        color: #fff;
+        border-radius: 2px;
+        line-height: 1;
+        height: 45px;
+      }
+      .share.button.defeated {
+        background-color:#ae52a1;
+      }
+      .colorblind .share.button {
+        background-color:#ff7931;
+      }
+      .colorblind .share.button.defeated {
+        background-color:#727272;
+      }
+      .share.button.hidden {
+        display:none;
+      }
+      #discord-button {
+        font-size: 12px;
+        color:#5865f2;
+        background: transparent;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #5865f2;
+        min-height: 64px;
+        height: auto;
+        margin-top: -10px;
+        padding: 8px 5px;
+      }
+      #discord-button svg {
+        fill:#5865f2;
+      }
+      #discord-button:hover {
+        color: #7883ff;
+        border-color: #7883ff;
+      }
+      #discord-button:hover svg {
+        fill:#7883ff;
+      }
+      #discord-button .description {
+        font-family: 'Roboto', sans-serif;
+        font-size: 9px;
+        text-transform: none;
+        padding: 2px 5px;
+        margin: 0;
+      }
+      @media only screen and (min-width: 768px) {
+        #discord-button {
+          font-size:16px;
+          padding: 12px 8px;
+        }
+        #discord-button .description {
+          font-size: 12px;
+        }
+      }
+      .dark #discord-button {
+        color:#c7caeb;
+        border-color: #c7caeb;
+      }
+      .dark #discord-button svg {
+        fill:#c7caeb;
+      }
+      .dark #discord-button:hover {
+        color: #fff;
+        border-color:#fff;
+      }
+      .dark #discord-button:hover svg {
+        fill:#fff;
+      }
+
+
+      #colorblind-share-container {
+        font-size: 85%;
+        margin-top: -10px;
+        margin-bottom: 18px;
+        color: #666666;
+        display: none;
+        cursor: default;
+      }
+      #colorblind-share-container input {
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: 2px;
+        cursor: pointer;
+      }
+      #colorblind-share-container label {
+        padding: 5px 5px;
+        margin-left: -3px;
+        margin-right: -3px;
+        cursor: pointer;
+      }
+      .colorblind #colorblind-share-container {
+        display: block !important;
+      }
+      .dark #colorblind-share-container {
+        color: #b1aaa0;
+      }
+
+      #credits, #credits-settings {
+        cursor: default;
+        font-size: 90%;
+      }
+
+      #settings {
+      }
+      #settings .setting-element {
+        margin: 24px 0;
+      }
+      #settings .options-container {
+        /* display: flex; */
+        justify-content: center;
+      }
+      #settings .label {
+        margin: 0;
+        cursor: default;
+        font-size: 105%;
+        color: #4c4c4f;
+        margin: 5px;
+        text-align: left;
+      }
+      .dark #settings .label {
+        color: #bbb;
+      }
+      #settings button {
+        height: 45px;
+        width: 100%;
+        margin: 2px;
+        padding: 0 2px;
+        background-color: #d2d0d6;
+        color: #222;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .dark #settings button {
+        background-color: #505559;
+        color: #fffffb;
+      }
+
+      .not-colorblind {
+        display:block;
+      }
+      .only-colorblind {
+        display:none;
+      }
+
+      .colorblind .not-colorblind {
+        display:none;
+      }
+      .colorblind .only-colorblind {
+        display:block;
+      }
+
+      #entity-name-container {
+        width: 100%;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 185px;
+        pointer-events: none;
+      }
+      @media only screen and (min-width: 768px) {
+        #entity-name-container {
+          bottom: 200px;
+        }
+      }
+      #entity-name {
+        width: fit-content;
+        padding: 4px 15px;
+        background: #e1dfe6;
+        color:#222;
+        font-size: 15px;
+        border-radius: 5px;
+        margin:0 auto;
+        font-family: 'Bowlby One SC', sans-serif;
+        text-transform: uppercase;
+        font-weight:400;
+        pointer-events: none;
+      }
+      @media only screen and (min-width: 768px) {
+        #entity-name {
+          font-size: 18px;
+        }
+      }
+      .dark #entity-name {
+        background: #323638;
+        color:#cccccc;
+      }
+
+      #debug-container {
+        position:fixed;
+        top:5px;
+        left:5px;
+      }
+      #debug-container button {
+        display:block;
+      }
+
+      svg {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+      .no-opacity {
+        opacity: 0 !important;
+      }
+      .hidden-language {
+        display: none;
+      }
+
+      /* Animations */
+
+      .pop-animation {
+        animation: pop_animation 250ms ease-out 0ms 1 normal;
+      }
+      @keyframes pop_animation {
+        0%   {transform:scale(100%);}
+        10%  {transform:scale(115%);}
+        40%  {transform:scale(95%);}
+        100% {transform:scale(100%);}
+      }
+      .unpop-animation {
+        animation: unpop_animation 175ms ease-out 0ms 1 normal;
+      }
+      @keyframes unpop_animation {
+        0%   {transform:scale(100%);}
+        10%  {transform:scale(105%);}
+        100% {transform:scale(100%);}
+      }
+      .doublepop-animation {
+        animation: doublepop_animation 250ms ease-out 0ms 1 normal;
+      }
+      @keyframes doublepop_animation {
+        0%   {transform:scale(100%);}
+        10%  {transform:scale(133%);}
+        40%  {transform:scale(85%);}
+        100% {transform:scale(100%);}
+      }
+
+      .displaybox-animation {
+        animation-name: displaybox_animation;
+        animation-duration: 400ms;
+        animation-timing-function: ease-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes displaybox_animation {
+        0%   {opacity:0; transform:translateY(-10%);}
+        10%   {opacity:0; transform:translateY(-10%);}
+        55%   {opacity:1; transform:translateY(1%);}
+        100%  {opacity:1; transform:translateY(0%);}
+      }
+
+      .loaded-animation {
+        animation: loaded_animation 100ms linear 0ms 1 normal;
+      }
+      @keyframes loaded_animation {
+        0%   {opacity:0;}
+        100% {opacity:1;}
+      }
+
+      .toggledarkmode-animation {
+        animation-name: toggledarkmode_animation;
+        animation-duration: 250ms;
+        animation-timing-function: ease-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes toggledarkmode_animation {
+        0%   {transform:scale(120%); filter:invert(1);}
+        50%   {transform:scale(100%); filter:invert(0.5);}
+        67%   {transform:scale(103%); filter:invert(0);}
+        100% {transform:scale(100%); filter:invert(0);}
+      }
+
+      .fadeout-animation {
+        animation-name: fadeout_animation;
+        animation-duration: 100ms;
+        animation-timing-function: linear;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes fadeout_animation {
+        0%   {opacity:1;}
+        100%  {opacity:0;}
+      }
+
+      .negation-animation {
+        animation-name: negation_animation;
+        animation-duration: 500ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes negation_animation {
+        0%   {transform:translateX(0%);}
+        15%  {transform:translateX(6%);}
+        30%  {transform:translateX(-3%);}
+        45%  {transform:translateX(3%);}
+        60%  {transform:translateX(-2%);}
+        75%  {transform:translateX(2%);}
+        90%  {transform:translateX(-1%);}
+        100% {transform:translateX(0%);}
+      }
+
+      .pulse-animation {
+        animation-name: pulse_animation;
+        animation-duration: 2000ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 10;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes pulse_animation {
+        0%   {transform:scale(1.0);}
+        5%   {transform:scale(1.25);}
+        10%  {transform:scale(0.75);}
+        15%  {transform:scale(1.25);}
+        25%  {transform:scale(1.0);}
+        100% {transform:scale(1.0);}
+      }
+
+      .keyboardslidein-animation {
+        animation-name: keyboardslidein_animation;
+        animation-duration: 150ms;
+        animation-timing-function: ease-out;
+        animation-delay: 500ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes keyboardslidein_animation {
+        0%   {margin-bottom:-200px; margin-top:200px;}
+        100%  {margin-bottom:0px; margin-top:0px;}
+      }
+
+      .titleslidein-animation {
+        animation-name: titleslidein_animation;
+        animation-duration: 125ms;
+        animation-timing-function: ease-out;
+        animation-delay: 75ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes titleslidein_animation {
+        0%   {margin-top:-80px; margin-bottom:80px;}
+        100%  {margin-top:0px; margin-bottom:0px;}
+      }
+
+      .spellactivated-animation {
+        animation-name: spellactivated_animation;
+        animation-duration: 1000ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 1500ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: backwards;
+      }
+      @keyframes spellactivated_animation {
+        0%   {transform:scale(100%); opacity:0.25; box-shadow: 2px 3px 0 #00000000;}
+        10%  {transform:scale(150%); opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        20%  {transform:scale(75%);  opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        30%  {transform:scale(100%); opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        70%  {transform:scale(100%); opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        80%  {transform:scale(125%); opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        90%  {transform:scale(90%);  opacity:1;    box-shadow: 2px 3px 0 #000000;}
+        100%  {transform:scale(100%); opacity:1;    box-shadow: 2px 3px 0 #000000;}
+      }
+
+      .spellfound-animation {
+        animation-name: spellfound_animation;
+        animation-duration: 1000ms;
+        animation-timing-function: ease-in;
+        animation-delay: 500ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes spellfound_animation {
+        0%   {transform:scale(0.0) translate(0, 0); opacity: 1;}
+        20%  {transform:scale(1.25) translate(0, 0); opacity: 1;}
+        35%  {transform:scale(0.75) translate(0, 0); opacity: 1;}
+        50%  {transform:scale(1.0) translate(0, 0); opacity: 1;}
+        85%  {transform:scale(1.0) translate(0, 0); opacity: 1;}
+        100% {transform:scale(1.0) translate(-125%, 333%); opacity: 0;}
+      }
+
+      .fliphint-animation {
+        animation-name: fliphint_animation;
+        animation-duration: 1000ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 250ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+        /* -webkit-backface-visibility: hidden;
+        backface-visibility: hidden; */
+      }
+      @keyframes fliphint_animation {
+        0%   {transform: rotateX(90deg);}
+        25%   {transform: rotateX(-45deg);}
+        50%   {transform: rotateX(15deg);}
+        100% {transform: rotateX(0deg);}
+      }
+
+      .namein-animation {
+        animation-name: namein_animation;
+        animation-duration: 300ms;
+        animation-timing-function: ease-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes namein_animation {
+        0%   {opacity:0; transform:translateY(30px);}
+        50%   {opacity:1; transform:translateY(-6px);}
+        100%  {opacity:1; transform:translateY(0px);}
+      }
+
+      .nameout-animation {
+        animation-name: nameout_animation;
+        animation-duration: 100ms;
+        animation-timing-function: ease-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes nameout_animation {
+        0%   {opacity:1; transform:translateY(0px);}
+        100%  {opacity:0; transform:translateY(15px);}
+      }
+
+      .contains.spellhighlight-animation {
+        animation-name: contains_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes contains_spellhighlight_animation {
+        0%  {background-color: #fff06a;}
+        40%   {background-color: #c6b62a;}
+        55%   {background-color: #fff06a;}
+        70%   {background-color: #c6b62a;}
+        85%   {background-color: #fff06a;}
+        100% {background-color: #c6b62a;}
+      }
+
+      .wrong.spellhighlight-animation {
+        animation-name: wrong_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes wrong_spellhighlight_animation {
+        0%  {background-color: #6c3b65;}
+        40%   {background-color: #ae52a1;}
+        55%   {background-color: #6c3b65;}
+        70%   {background-color: #ae52a1;}
+        85%   {background-color: #6c3b65;}
+        100% {background-color: #ae52a1;}
+      }
+
+      .correct.spellhighlight-animation {
+        animation-name: correct_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes correct_spellhighlight_animation {
+        0%  {background-color: #61e273;}
+        40%   {background-color: #51c261;}
+        55%   {background-color: #61e273;}
+        70%   {background-color: #51c261;}
+        85%   {background-color: #61e273;}
+        100% {background-color: #51c261;}
+      }
+
+      .colorblind .contains.spellhighlight-animation {
+        animation-name: colorblind_contains_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes colorblind_contains_spellhighlight_animation {
+        0%  {background-color: #ade1ff;}
+        40%   {background-color: #62c1f7;}
+        55%   {background-color: #ade1ff;}
+        70%   {background-color: #62c1f7;}
+        85%   {background-color: #ade1ff;}
+        100% {background-color: #62c1f7;}
+      }
+
+      .colorblind .wrong.spellhighlight-animation {
+        animation-name: colorblind_wrong_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes colorblind_wrong_spellhighlight_animation {
+        0%  {background-color: #383838;}
+        40%   {background-color: #727272;}
+        55%   {background-color: #383838;}
+        70%   {background-color: #727272;}
+        85%   {background-color: #383838;}
+        100% {background-color: #727272;}
+      }
+
+      .colorblind .correct.spellhighlight-animation {
+        animation-name: colorblind_correct_spellhighlight_animation;
+        animation-duration: 1200ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: none;
+      }
+      @keyframes colorblind_correct_spellhighlight_animation {
+        0%  {background-color: #ffb364;}
+        40%   {background-color: #ff7931;}
+        55%   {background-color: #ffb364;}
+        70%   {background-color: #ff7931;}
+        85%   {background-color: #ffb364;}
+        100% {background-color: #ff7931;}
+      }
+
+      .losthardmodebadge-animation {
+        animation-name: losthardmodebadge_animation;
+        animation-duration: 500ms;
+        animation-timing-function: ease-in-out;
+        animation-delay: 0ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes losthardmodebadge_animation {
+        0%   {transform:scale(1.0); filter:brightness(1); visibility: block;}
+        20%  {transform:scale(1.25); filter:brightness(1.5); visibility: block;}
+        40%  {transform:scale(1.0); filter:brightness(1); visibility: block;}
+        60%  {transform:scale(1.33); filter:brightness(1.5); visibility: block;}
+        100% {transform:scale(0.0); filter:brightness(1); visibility: none;}
+      }
+
+      .displaydiscord-animation {
+        animation-name: displaydiscord_animation;
+        animation-duration: 400ms;
+        animation-timing-function: ease-out;
+        animation-delay: 300ms;
+        animation-iteration-count: 1;
+        animation-direction: normal;
+        animation-fill-mode: both;
+      }
+      @keyframes displaydiscord_animation {
+        0%   {opacity:0; transform:translateX(-50%);}
+        10%   {opacity:0; transform:translateX(-50%);}
+        55%   {opacity:1; transform:translateX(5%);}
+        100%  {opacity:1; transform:translateX(0%);}
+      }
+
+
+
+    </style>
+  </head>
+
+  <body class="dark">
+    <div id="page-container">
+      <div id="main">
+        <div id="header">
+          <h1 id="title">Dung<span class="highlighted-letter">l</span>eon <span id="puzzle-number">...</span></h1>
+          <div id="header-buttons-container" class="hidden">
+            <button id="settings-button" class="round-button" aria-label="Settings">
+              <svg style="height:60%; width:60%; fill:#ffffff;" enable-background="new 0 0 489.802 489.802" version="1.1" viewBox="0 0 489.802 489.802" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+              	<path d="m20.701 281.9l32.1 0.2c4.8 24.7 14.3 48.7 28.7 70.5l-22.8 22.6c-8.2 8.1-8.2 21.2-0.2 29.4l24.6 24.9c8.1 8.2 21.2 8.2 29.4 0.2l22.8-22.6c21.6 14.6 45.5 24.5 70.2 29.5l-0.2 32.1c-0.1 11.5 9.2 20.8 20.7 20.9l35 0.2c11.5 0.1 20.8-9.2 20.9-20.7l0.2-32.1c24.7-4.8 48.7-14.3 70.5-28.7l22.6 22.8c8.1 8.2 21.2 8.2 29.4 0.2l24.9-24.6c8.2-8.1 8.2-21.2 0.2-29.4l-22.6-22.8c14.6-21.6 24.5-45.5 29.5-70.2l32.1 0.2c11.5 0.1 20.8-9.2 20.9-20.7l0.2-35c0.1-11.5-9.2-20.8-20.7-20.9l-32.1-0.2c-4.8-24.7-14.3-48.7-28.7-70.5l22.8-22.6c8.2-8.1 8.2-21.2 0.2-29.4l-24.6-24.9c-8.1-8.2-21.2-8.2-29.4-0.2l-22.8 22.6c-21.6-14.6-45.5-24.5-70.2-29.5l0.2-32.1c0.1-11.5-9.2-20.8-20.7-20.9l-35-0.2c-11.5-0.1-20.8 9.2-20.9 20.7l-0.3 32.1c-24.8 4.8-48.8 14.3-70.5 28.7l-22.6-22.8c-8.1-8.2-21.2-8.2-29.4-0.2l-24.8 24.6c-8.2 8.1-8.2 21.2-0.2 29.4l22.6 22.8c-14.6 21.6-24.5 45.5-29.5 70.2l-32.1-0.2c-11.5-0.1-20.8 9.2-20.9 20.7l-0.2 35c-0.1 11.4 9.2 20.8 20.7 20.9zm158.6-103.3c36.6-36.2 95.5-35.9 131.7 0.7s35.9 95.5-0.7 131.7-95.5 35.9-131.7-0.7-35.9-95.5 0.7-131.7z"/>
+              </svg>
+            </button>
+            <button id="help-button" class="round-button">?</button>
+          </div>
+        </div>
+        <div id="game-container" class="hidden">
+          <div id="hud-container"><div id="hud">
+            <div id="hud-left-container">
+              <div id="hearts-container"></div>
+              <div id="hard-mode-badge"></div>
+            </div>
+            <div id="info-container">
+              <div class="info"><img src="img/stats-icon-heroes.png"><span id="heroes-counter" class="value"></span></div>
+              <div class="info"><img src="img/stats-icon-monsters.png"><span id="monsters-counter" class="value"></span></div>
+              <div class="info"><img src="img/stats-icon-treasure.png"><span id="gold-counter" class="value"></span></div>
+            </div>
+          </div></div>
+          <div id="grid-container"><div id="grid"></div></div>
+        </div>
+        <div id="bottom-container" class="hidden">
+          <!-- <div id="items-buttons-container" class="hidden"></div> -->
+          <div id="buttons-container"></div>
+          <div id="entity-name-container" class="hidden"><p id="entity-name"></p></div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- BEGIN INSTRUCTIONS -->
+
+    <div id="instructions-container" class="overlay-container hidden"><div id="instructions" class="overlay">
+
+      <!-- Page 0 -->
+      <div class="instructions-page">
+        <h2 lang="pt-BR">Como jogar</h2>
+        <h2 lang="en">How to play</h2>
+	      <h2 lang="de">Wie man spielt</h2>
+        <h2 lang="es">Como jugar</h2>
+
+        <p lang="pt-BR">Adivinhe a <strong>composição do calabouço</strong> em 6 tentativas.</p>
+        <p lang="en">Guess the <strong>dungeon's composition</strong> in 6 guesses.</p>
+	      <p lang="de">Du hast 6 Versuche, um den <strong>Aufbau des Dungeons</strong> herauszufinden.</p>
+	      <p lang="es">Adivina la <strong>composición de la mazmorra</strong> en 6 intentos.</p>
+
+        <div class="not-colorblind">
+          <p lang="pt-BR">Peças certas no lugar certo aparecem em <strong style="color:#2DA218;">verde</strong>.</p>
+          <p lang="en">Pieces that are in the right spot appear <strong style="color:#2DA218;">green</strong>.</p>
+	        <p lang="de">Wenn eine Figur an der richtigen Stelle ist, erscheint sie <strong style="color:#2DA218;">grün</strong>.</p>
+          <p lang="es">Las piezas que están en el lugar correcto aparecen <strong style="color:#2DA218;">verdes</strong>.</p>
+
+          <img src="img/tutorial-01-green.png">
+
+          <p lang="pt-BR">Peças que existem no calabouço mas estão na posição errada ficam <strong style="color:#FFA80F;">amarelas</strong>.</p>
+          <p lang="en">Pieces that exist in the dungeon but are in the wrong position turn <strong style="color:#FFA80F;">yellow</strong>.</p>
+          <p lang="de">Wenn eine Figur an der falschen Stelle ist, erscheint sie <strong style="color:#FFA80F;">gelb</strong>.</p>
+          <p lang="es">Las piezas que existen en la mazmorra pero están en una posición incorrecta se vuelven <strong style="color:#FFA80F;">amarillas</strong>.</p>
+
+          <img src="img/tutorial-02-yellow.png">
+
+          <p lang="pt-BR">Peças que não existem no calabouço ficam <strong style="color:#ae52a1;">vermelho</strong>.</p>
+          <p lang="en">Pieces that don't exist in the dungeon turn <strong style="color:#ae52a1;">red</strong>.</p>
+          <p lang="de">Wenn eine Figur in einem Dungeon gar nicht auftaucht, erscheint sie <strong style="color:#ae52a1;">rot</strong>.</p>
+          <p lang="es">Las piezas que no existen en la mazmorra aparecen <strong style="color:#ae52a1;">rojas</strong>.</p>
+
+          <img src="img/tutorial-03-red.png">
+
+          <p lang="pt-BR"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Se quiser um desafio extra, use as peças <strong style="color:#2DA218;">verdes</strong> e <strong style="color:#FFA80F;">amarelas</strong> já reveladas nos chutes seguintes.</p>
+          <p lang="en"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> If you want an extra challenge, use the <strong style="color:#2DA218;">green</strong> and <strong style="color:#FFA80F;">yellow</strong> pieces already revealed in your next guesses.</p>
+          <p lang="de"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Suchst du nach einer Herausforderung? Benutze bereits entdeckte <strong style="color:#2DA218;">grüne</strong> und <strong style="color:#FFA80F;">gelbe</strong> Figuren bei deinen nächsten Versuchen erneut.</p>
+          <p lang="es"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Si quieres un reto adicional, utiliza las piezas <strong style="color:#2DA218;">verdes</strong> y <strong style="color:#FFA80F;">amarillas</strong> ya reveladas en tus siguientes intentos.</p>
+        </div>
+
+        <div class="only-colorblind">
+          <p lang="pt-BR">Peças certas no lugar certo aparecem em <strong style="color:#ff7931;">laranja</strong>.</p>
+          <p lang="en">Pieces that are in the right spot appear <strong style="color:#ff7931;">orange</strong>.</p>
+          <p lang="de">Wenn eine Figur an der richtigen Stelle ist, erscheint sie <strong style="color:#ff7931;">orange</strong>.</p>
+          <p lang="es">Las piezas que están en el lugar correcto aparecen <strong style="color:#ff7931;">naranjas</strong>.</p>
+
+          <img src="img/tutorial-01-green-colorblind.png">
+
+          <p lang="pt-BR">Peças que existem no calabouço mas estão na posição errada ficam <strong style="color:#62c1f7;">azul</strong>.</p>
+          <p lang="en">Pieces that exist in the dungeon but are in the wrong position turn <strong style="color:#62c1f7;">blue</strong>.</p>
+          <p lang="de">Wenn eine Figur an der falschen Stelle ist, erscheint sie <strong style="color:#62c1f7;">blau</strong>.</p>
+          <p lang="es">Las piezas que existen en la mazmorra pero están en una posición incorrecta se vuelven <strong style="color:#62c1f7;">azules</strong>.</p>
+
+          <img src="img/tutorial-02-yellow-colorblind.png">
+
+          <p lang="pt-BR">Peças que não existem no calabouço ficam <strong style="color:#727272;">cinza</strong>.</p>
+          <p lang="en">Pieces that don't exist in the dungeon turn <strong style="color:#727272;">grey</strong>.</p>
+          <p lang="de">Wenn eine Figur in einem Dungeon gar nicht auftaucht, erscheint sie <strong style="color:#727272;">grau</strong>.</p>
+          <p lang="es">Las piezas que no existen en la mazmorra aparecen <strong style="color:#727272;">grises</strong>.</p>
+
+          <img src="img/tutorial-03-red-colorblind.png">
+
+          <p lang="pt-BR"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Se quiser um desafio extra, use as peças <strong style="color:#ff7931;">laranjas</strong> e <strong style="color:#62c1f7;">azuis</strong> já reveladas nos chutes seguintes.</p>
+          <p lang="en"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> If you want an extra challenge, use the <strong style="color:#ff7931;">orange</strong> and <strong style="color:#62c1f7;">blue</strong> pieces already revealed in your next guesses.</p>
+          <p lang="de"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Suchst du nach einer Herausforderung? Benutze bereits entdeckte <strong style="color:#ff7931;">orange</strong> und <strong style="color:#62c1f7;">blaue</strong> Figuren bei deinen nächsten Versuchen erneut.</p>
+          <p lang="es"><img style="display:inline-block;" src="img/stats-hard-red.png" width="11" height="11"> Si quieres un reto adicional, utiliza las piezas <strong style="color:#ff7931;">naranjas</strong> y <strong style="color:#62c1f7;">azules</strong> ya reveladas en tus siguientes intentos.</p>
+        </div>
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">Vamos lá!</span>
+          <span lang="en">Got it!</span>
+          <span lang="de">Alles klar!</span>
+          <span lang="es">¡Adelante!</span>
+        </button>
+      </div>
+
+      <!-- Page 1 -->
+      <div class="instructions-page">
+        <h2 lang="pt-BR">Mas tem uma coisa!</h2>
+        <h2 lang="en">But there's a catch!</h2>
+        <h2 lang="de">Doch es gibt einen Haken!</h2>
+        <h2 lang="es">¡Pero cuidado!</h2>
+
+        <p lang="pt-BR">Os calabouços seguem algumas <strong>regras secretas</strong>.<br>Desvende-as para encontrar as respostas mais rápido com o tempo!</p>
+        <p lang="en">Dungeons follow a set of <strong>secret rules</strong>.<br>Figure them out to find the answers faster over time!</p>
+	      <p lang="de">In den Dungeons gelten einige <strong>geheime Regeln</strong>. Finde sie heraus, um schneller zur Lösung zu gelangen!</p>
+        <p lang="es">Las mazmorras tienen <strong>reglas secretas</strong>.<br> ¡Descúbrelas para poder adivinar la solución con más facilidad!</p>
+
+        <p lang="pt-BR">As primeiras são por conta da casa:</p>
+        <p lang="en">First ones are on the house:</p>
+        <p lang="de">Die ersten paar Regeln gibt es auf Kosten des Hauses:</p>
+        <p lang="es">Las primeras van por cuenta de la casa:</p>
+
+        <div class="instructions-hint-container"><div class="instructions-hint fliphint-animation" style="animation-delay: 250ms;">
+          <p lang="pt-BR">Todo calabouço tem pelo menos<br>1 herói e 1 monstro.</p>
+          <p lang="en">Every dungeon has at least<br>1 hero and 1 monster.</p>
+          <p lang="de">In jedem Dungeon gibt es mindestens 1 Helden und 1 Monster.</p>
+          <p lang="es">Cada mazmorra tiene al menos<br>1 héroe y 1 monstruo.</p>
+        </div></div>
+
+	      <div class="instructions-hint-container"><div class="instructions-hint fliphint-animation" style="animation-delay: 500ms;">
+          <p lang="pt-BR">Algumas peças só aparecem<br>acompanhando outras peças.</p>
+          <p lang="en">Some pieces only appear<br>along with other pieces.</p>
+          <p lang="de">Manche Figuren tauchen nur mit bestimmten anderen Figuren gemeinsam auf.</p>
+          <p lang="es">Algunas piezas sólo aparecen<br>acompañadas de otras piezas.</p>
+        </div></div>
+
+	      <div class="instructions-hint-container"><div class="instructions-hint fliphint-animation" style="animation-delay: 750ms;">
+          <p lang="pt-BR">Algumas peças só aparecem<br>em um lugar específico.</p>
+          <p lang="en">Some pieces only appear<br>in a specific spot.</p>
+          <p lang="de">Manche Figuren tauchen nur auf bestimmten Positionen auf.</p>
+          <p lang="es">Algunas piezas sólo aparecen<br>en un lugar concreto.</p>
+        </div></div>
+
+        <button class="instructions-next-page button" style="margin-top: 27px;">
+          <span lang="pt-BR">Deixa comigo!</span>
+          <span lang="en">Got it!</span>
+          <span lang="de">Alles klar!</span>
+          <span lang="es">¡Entendido!</span>
+        </button>
+      </div>
+
+      <!-- Page 2 -->
+      <div class="instructions-page">
+        <h2 lang="pt-BR">Você achou uma magia!</h2>
+        <h2 lang="en">You found a magic spell!</h2>
+        <h2 lang="de">Du hast einen Zauberstab gefunden!</h2>
+        <h2 lang="es">¡Has encontrado una varita mágica!</h2>
+
+        <p lang="pt-BR">Use ela se precisar de uma ajuda extra.</p>
+        <p lang="en">Use it if you need some extra help.</p>
+        <p lang="de">Nutze ihn, wenn du ein bisschen Hilfe brauchst.</p>
+        <p lang="es">Utilízala si necesitas ayuda.</p>
+
+    		<p lang="pt-BR">Um tipo remove peças inválidas, o outro ilumina uma peça correta.</p>
+    		<p lang="en">One type removes invalid pieces, while the other highlights a correct piece.</p>
+        <p lang="de">Der eine Stab markiert Figuren, die nicht vorkommen. Der andere markiert eine Figur, die in diesem Dungeon auftaucht.</p>
+        <p lang="es">Una varita señala piezas no válidas, la otra resalta una pieza correcta.</p>
+
+        <img src="img/spell-destroy.png" width="22" height="40" style="image-rendering:pixelated; margin: 0 15px;">
+        <img src="img/spell-highlight.png" width="22" height="40" style="image-rendering:pixelated; margin: 0 15px;">
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">Entendi!</span>
+          <span lang="en">Got it!</span>
+          <span lang="de">Alles klar!</span>
+          <span lang="es">¡Entendido!</span>
+        </button>
+      </div>
+
+      <!-- Page 3 -->
+      <!-- Old instruction page -->
+      <div class="instructions-page">
+        <h2 lang="pt-BR">Se liga!</h2>
+        <h2 lang="en">Watch out!</h2>
+
+        <div class="not-colorblind">
+          <p lang="pt-BR">Peças <strong style="color:#2DA218;">verdes</strong> de chutes anteriores precisam ser usadas no lugar certo nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#2DA218;">Green</strong> pieces from previous guesses must be used in the same place in the following guesses.</p>
+
+          <p lang="pt-BR">Peças <strong style="color:#FFA80F;">amarelas</strong> de chutes anteriores precisam ser usadas nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#FFA80F;">Yellow</strong> pieces that appeared in a guess must be used in the following guesses.</p>
+
+          <p lang="pt-BR">Peças <strong style="color:#ae52a1;">vermelhas</strong> não podem ser usadas nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#ae52a1;">Red</strong> pieces can't be used in next guesses.</p>
+
+          <p lang="pt-BR">(<strong>Ou então</strong> você pode detonar as regras e jogas sem essas restrições por hoje.)</p>
+          <p lang="en">(<strong>That, or</strong> you can blow the rules to pieces and lift these restrictions for today.)</p>
+        </div>
+
+        <div class="only-colorblind">
+          <p lang="pt-BR">Peças <strong style="color:#ff7931;">laranja</strong> de chutes anteriores precisam ser usadas no lugar certo nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#ff7931;">Orange</strong> pieces from previous guesses must be used in the same place in the following guesses.</p>
+
+          <p lang="pt-BR">Peças <strong style="color:#62c1f7;">azul</strong> de chutes anteriores precisam ser aproveitadas nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#62c1f7;">Blue</strong> pieces that appeared in a guess must be used in the following guesses.</p>
+
+          <p lang="pt-BR">Peças <strong style="color:#727272;">cinza</strong> não podem ser usadas nos próximos chutes.</p>
+          <p lang="en"><strong style="color:#727272;">Grey</strong> pieces can't be used in next guesses.</p>
+        </div>
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">Saquei!</span>
+          <span lang="en">Got it!</span>
+        </button>
+
+        <button id="no-rules-button" class="button">
+          <span lang="pt-BR">Abaixo às regras! 💣</span>
+          <span lang="en">Down with the rules! 💣</span>
+        </button>
+      </div>
+
+      <!-- Page 4 -->
+      <div class="instructions-page">
+        <h2 lang="pt-BR">Olha, tem mais!</h2>
+        <h2 lang="en">Look, there's more!</h2>
+        <h2 lang="de">Noch etwas!</h2>
+        <h2 lang="es">Ojo, ¡hay más!</h2>
+
+        <p lang="pt-BR">Quando uma peça fica marcada com um “+”, é porque ela aparece mais vezes na resposta final.</p>
+        <p lang="en">Sometimes a piece is marked with a “+”. It means that this piece appears more times in the answer.</p>
+        <p lang="de">Manchmal sind Figuren mit einem kleinen „+" markiert. Das heißt, dass die Figur in diesem Dungeon noch öfter auftaucht.</p>
+        <p lang="es">Cuando una pieza está marcada con un "+", es porque aparece más veces en la solución.</p>
+
+        <div class="not-colorblind"><img src="img/tutorial-plus-sign.png"></div>
+        <div class="only-colorblind"><img src="img/tutorial-plus-sign-colorblind.png"></div>
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">Entendi!</span>
+          <span lang="en">Got it!</span>
+          <span lang="de">Alles klar!</span>
+          <span lang="es">¡Entendido!</span>
+        </button>
+      </div>
+
+      <!-- Page 5 -->
+      <div class="instructions-page" style="z-order:10;">
+        <h2 lang="pt-BR">Ué, cadê o...?</h2>
+        <h2 lang="en">Wait, where is the...?</h2>
+        <h2 lang="de">Hä? Moment! Wo ist der...?</h2>
+        <h2 lang="es">¡Un momento! ¿dónde está el...?</h2>
+
+        <p lang="pt-BR">Algumas peças têm habilidades especiais que desafiam regras e <strong>podem afetar outras peças</strong>. Se você ver algo que parece estranho, tente descobrir o que está acontecendo aí.</p>
+        <p lang="en">Some pieces boast rule-bending abilities that can <strong>affect other pieces</strong>. If you see something that seems weird, try to discover what's happening there.</p>
+        <p lang="de">Manche Figuren können <strong>andere Figuren beeinflussen</strong> und so die Regeln scheinbar brechen. Wenn dir etwas komisch vorkommt, bist du vielleicht einer geheimen Regel auf der Spur.</p>
+        <p lang="es">Algunas piezas tienen habilidades especiales que desafían las reglas y <strong>pueden afectar a otras piezas</strong>. Si ves algo extraño, intenta averiguar que ha pasado. Quizás se trate de una regla secreta.</p>
+
+        <br>
+        <img src="img/tutorial-necromancer.png">
+        <br>
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">Entendi!</span>
+          <span lang="en">Got it!</span>
+          <span lang="de">Alles klar!</span>
+          <span lang="es">¡Entendido!</span>
+        </button>
+      </div>
+
+      <!-- Page 6 -->
+      <div class="instructions-page" style="z-order:10;">
+        <h2 lang="pt-BR">Jogue do seu jeito <img style="display:inline-block;" src="img/stats-hard-red.png"></h2>
+        <h2 lang="en">Play your way <img style="display:inline-block;" src="img/stats-hard-red.png"></h2>
+        <h2 lang="de">Spiel so, wie es dir gefällt <img style="display:inline-block;" src="img/stats-hard-red.png"></h2>
+        <h2 lang="es">Juega a tu manera <img style="display:inline-block;" src="img/stats-hard-red.png"></h2>
+
+        <p lang="pt-BR">Agora é possível jogar sem restrições para os chutes, ou, como um desafio extra, você pode tentar conquistar o <strong>Cristal da Dificuldade</strong> a qualquer dia.</p>
+        <p lang="en">Now it's possible to play without restrictions for guesses, or, as an extra challenge, you can try to conquer the <strong>Difficulty Crystal</strong> any day.</p>
+        <p lang="de">Jetzt kannst du ohne Einschränkungen für deine Versuche spielen. Ist dir das Spiel zu einfach? Versuche den <strong>Herausforderungs-Kristall</strong> zu gewinnen.</p>
+        <p lang="es">Puedes jugar sin restricciones en cada intento, o, como reto adicional, puedes intentar conseguir el <strong>Cristal de Dificultad</strong>.</p>
+
+        <p lang="pt-BR" class="not-colorblind">Para manter o Cristal da Dificuldade, seus chutes devem aproveitar as peças <strong style="color:#2DA218;">verdes</strong> e <strong style="color:#FFA80F;">amarelas</strong> que já apareceram nos chutes anteriores.</p>
+        <p lang="en" class="not-colorblind">To keep your Difficulty Crystal, your guesses must use any <strong style="color:#2DA218;">green</strong> and <strong style="color:#FFA80F;">yellow</strong> pieces that appeared in previous guesses.</p>
+        <p lang="de" class="not-colorblind">Wenn du den Herausforderungs-Kristall behalten möchtest, musst du bereits entdeckte <strong style="color:#2DA218;">grüne</strong> und <strong style="color:#FFA80F;">gelbe</strong> Figuren in deinen nächsten Versuchen wieder verwenden.</p>
+        <p lang="es" class="not-colorblind">Para mantener el Cristal de Dificultad, tus respuestas deben utilizar las piezas <strong style="color:#2DA218;">verdes</strong> y <strong style="color:#FFA80F;">amarillas</strong> que hayan aparecido en los intentos anteriores.</p>
+
+        <p lang="pt-BR" class="only-colorblind">Para manter o Cristal da Dificuldade, seus chutes devem aproveitar as peças <strong style="color:#ff7931;">laranjas</strong> e <strong style="color:#62c1f7;">azuis</strong> que já apareceram nos chutes anteriores.</p>
+        <p lang="en" class="only-colorblind">To keep your Difficulty Crystal, your guesses must use any <strong style="color:#ff7931;">orange</strong> and <strong style="color:#62c1f7;">blue</strong> pieces that appeared in previous guesses.</p>
+        <p lang="de" class="only-colorblind">Wenn du den Herausforderungs-Kristall behalten möchtest, musst du bereits entdeckte <strong style="color:#ff7931;">orange</strong> und <strong style="color:#62c1f7;">blaue</strong> Figuren in deinen nächsten Versuchen wieder verwenden.</p>
+        <p lang="es" class="only-colorblind">Para mantener el Cristal de Dificultad, tus respuestas deben utilizar las piezas <strong style="color:#ff7931;">naranjas</strong> y <strong style="color:#62c1f7;">azules</strong> que hayan aparecido en los intentos anteriores.</p>
+
+        <button class="instructions-next-page button">
+          <span lang="pt-BR">OK!</span>
+          <span lang="en">OK!</span>
+          <span lang="de">Verstanden!</span>
+          <span lang="es">OK!</span>
+        </button>
+      </div>
+
+
+    </div></div>
+
+    <!-- END INSTRUCTIONS -->
+
+
+    <!-- BEGIN RESULTS SCREEN -->
+
+    <div id="results-container" class="overlay-container hidden"><div id="results" class="overlay">
+      <div id="stats-outer-container">
+        <div class="victory">
+          <h2>
+            <span lang="pt-BR">Acertou!</span>
+            <span lang="en">Got it!</span>
+            <span lang="de">Geschafft!</span>
+            <span lang="es">¡Victoria!</span>
+            <div id="results-hard-mode-badge"></div>
+          </h2>
+        </div>
+        <div class="defeated">
+          <h2 lang="pt-BR">Não deu...</h2>
+          <h2 lang="en">Not this time...</h2>
+          <h2 lang="de">Schade...</h2>
+          <h2 lang="es">Otra vez será...</h2>
+        </div>
+        <div id="result-answer-container"></div>
+
+        <div id="stats-plays-container" class="stats-container">
+          <div id="stats-plays" class="stats"></div>
+        </div>
+        <div id="stats-spoils-container" class="stats-container stat">
+          <p lang="pt-BR">espólios</p>
+          <p lang="en">spoils</p>
+          <p lang="de">Beute</p>
+          <p lang="es">botín</p>
+          <div id="stats-spoils" class="stats"></div>
+        </div>
+
+        <div id="timer" class="stat">
+          <p lang="pt-BR">próxima em: </p>
+          <p lang="en">next in:</p>
+          <p lang="de">Nächstes Dungleon in:</p>
+          <p lang="es">siguiente en:</p>
+          <p id="timer-container" class="value"></p>
+        </div>
+
+      </div>
+
+      <button class="share button" id="share-button-system">
+        <span lang="pt-BR">Compartilhe</span>
+        <span lang="en">Share</span>
+        <span lang="de">Teilen</span>
+        <span lang="es">Compartir</span>
+        <span id="share-icon">
+          <svg width="23" height="33" enable-background="new 0 0 227.216 227.216" version="1.1" viewBox="0 0 227.216 227.216" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+            <path d="m175.9 141.48c-13.249 0-25.11 6.044-32.98 15.518l-51.194-29.066c1.592-4.48 2.467-9.297 2.467-14.317 0-5.019-0.875-9.836-2.467-14.316l51.19-29.073c7.869 9.477 19.732 15.523 32.982 15.523 23.634 0 42.862-19.235 42.862-42.879 2e-3 -23.637-19.226-42.866-42.86-42.866-23.637 0-42.867 19.229-42.867 42.865 0 5.02 0.874 9.838 2.467 14.319l-51.193 29.074c-7.869-9.472-19.729-15.514-32.975-15.514-23.64 0-42.873 19.229-42.873 42.866 0 23.636 19.233 42.865 42.873 42.865 13.246 0 25.105-6.042 32.974-15.513l51.194 29.067c-1.593 4.481-2.468 9.3-2.468 14.321 0 23.636 19.23 42.865 42.867 42.865 23.634 0 42.862-19.23 42.862-42.865 1e-3 -23.64-19.227-42.874-42.861-42.874zm0-126.48c15.363 0 27.862 12.5 27.862 27.865 0 15.373-12.499 27.879-27.862 27.879-15.366 0-27.867-12.506-27.867-27.879 0-15.365 12.501-27.865 27.867-27.865zm-124.57 126.48c-15.369 0-27.873-12.501-27.873-27.865 0-15.366 12.504-27.866 27.873-27.866 15.363 0 27.861 12.5 27.861 27.866 0 15.364-12.499 27.865-27.861 27.865zm124.57 70.74c-15.366 0-27.867-12.501-27.867-27.865 0-15.37 12.501-27.875 27.867-27.875 15.363 0 27.862 12.505 27.862 27.875 0 15.364-12.499 27.865-27.862 27.865z"/>
+          </svg>
+        </span>
+      </button>
+
+      <button class="share button" id="share-button-twitter" style="margin-bottom:7px;">
+        <span lang="pt-BR">Compartilhe</span>
+        <span lang="en">Share</span>
+        <span lang="de">Teilen</span>
+        <span lang="es">Compartir</span>
+        <span id="share-icon">
+          <svg width="22" height="22" enable-background="new 0 0 310 310" version="1.1" viewBox="0 0 310 310" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+            <path d="m302.97 57.388c-4.87 2.16-9.877 3.983-14.993 5.463 6.057-6.85 10.675-14.91 13.494-23.73 0.632-1.977-0.023-4.141-1.648-5.434-1.623-1.294-3.878-1.449-5.665-0.39-10.865 6.444-22.587 11.075-34.878 13.783-12.381-12.098-29.197-18.983-46.581-18.983-36.695 0-66.549 29.853-66.549 66.547 0 2.89 0.183 5.764 0.545 8.598-45.535-3.998-87.868-26.379-116.94-62.038-1.036-1.271-2.632-1.956-4.266-1.825-1.635 0.128-3.104 1.05-3.93 2.467-5.896 10.117-9.013 21.688-9.013 33.461 0 16.035 5.725 31.249 15.838 43.137-3.075-1.065-6.059-2.396-8.907-3.977-1.529-0.851-3.395-0.838-4.914 0.033-1.52 0.871-2.473 2.473-2.513 4.224-7e-3 0.295-7e-3 0.59-7e-3 0.889 0 23.935 12.882 45.484 32.577 57.229-1.692-0.169-3.383-0.414-5.063-0.735-1.732-0.331-3.513 0.276-4.681 1.597-1.17 1.32-1.557 3.16-1.018 4.84 7.29 22.76 26.059 39.501 48.749 44.605-18.819 11.787-40.34 17.961-62.932 17.961-4.714 0-9.455-0.277-14.095-0.826-2.305-0.274-4.509 1.087-5.294 3.279-0.785 2.193 0.047 4.638 2.008 5.895 29.023 18.609 62.582 28.445 97.047 28.445 67.754 0 110.14-31.95 133.76-58.753 29.46-33.421 46.356-77.658 46.356-121.37 0-1.826-0.028-3.67-0.084-5.508 11.623-8.757 21.63-19.355 29.773-31.536 1.237-1.85 1.103-4.295-0.33-5.998-1.431-1.704-3.816-2.255-5.852-1.353z"/>
+          </svg>
+        </span>
+      </button>
+
+      <button class="share button" id="share-button-copy" style="margin-top:7px;">
+        <span lang="pt-BR">Copiar</span>
+        <span lang="en">Copy</span>
+        <span lang="de">Kopieren</span>
+        <span lang="es">Copiar</span>
+        <span id="share-icon">
+          <svg width="22" height="22" enable-background="new 0 0 352.804 352.804" version="1.1" viewBox="0 0 352.804 352.804" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+          	<path d="m318.54 57.282h-47.652v-42.282c0-8.284-6.716-15-15-15h-221.62c-8.284 0-15 6.716-15 15v265.52c0 8.284 6.716 15 15 15h47.651v42.281c0 8.284 6.716 15 15 15h221.62c8.284 0 15-6.716 15-15v-265.52c0-8.284-6.716-15-15-15zm-269.28 208.24v-235.52h191.62v27.282h-143.97c-8.284 0-15 6.716-15 15v193.24h-32.652zm254.28 57.282h-191.62v-235.52h191.62v235.52z"/>
+          </svg>
+        </span>
+      </button>
+
+      <button class="share button hidden" id="discord-button">
+        <span lang="pt-BR">Conheça nosso Discord!</span>
+        <span lang="en">Join our Discord!</span>
+        <span lang="de">Tritt unserem Discord bei!</span>
+        <span lang="es">¡Únete a nuestro Discord!</span>
+        <span id="share-icon">
+          <svg style="height:18px; width:18px;" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M18.942 5.556a16.299 16.299 0 0 0-4.126-1.297c-.178.321-.385.754-.529 1.097a15.175 15.175 0 0 0-4.573 0 11.583 11.583 0 0 0-.535-1.097 16.274 16.274 0 0 0-4.129 1.3c-2.611 3.946-3.319 7.794-2.965 11.587a16.494 16.494 0 0 0 5.061 2.593 12.65 12.65 0 0 0 1.084-1.785 10.689 10.689 0 0 1-1.707-.831c.143-.106.283-.217.418-.331 3.291 1.539 6.866 1.539 10.118 0 .137.114.277.225.418.331-.541.326-1.114.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595c.415-4.396-.709-8.209-2.973-11.589zM8.678 14.813c-.988 0-1.798-.922-1.798-2.045s.793-2.047 1.798-2.047 1.815.922 1.798 2.047c.001 1.123-.793 2.045-1.798 2.045zm6.644 0c-.988 0-1.798-.922-1.798-2.045s.793-2.047 1.798-2.047 1.815.922 1.798 2.047c0 1.123-.793 2.045-1.798 2.045z"/></svg>
+        </span>
+        <p class="description">
+          <span lang="pt-BR">Participe da nossa comunidade para discutir teorias de <br>regras secretas, ver dungeons anteriores e mais!</span>
+          <span lang="en">Join our community to discuss the secret rules, see <br>past dungeons and discover more cool stuff!</span>
+          <span lang="de">Die Community bespricht dort geheime Dungleon-Regeln, sammelt alle vergangenen Lösungen und redet über noch viel mehr coolen Kram!</span>
+          <span lang="es">¡Únete a nuestra comunidad para debatir teorías sobre las reglas secretas, ver los resultados de dias anteriores y mucho más!</span>
+        </p>
+      </button>
+
+      <div id="colorblind-share-container">
+        <input type="checkbox" id="colorblind-share" name="colorblind-share">
+        <label for="colorblind-share">
+          <span lang="pt-BR">Compartilhar com cores otimizadas para daltonismo</span>
+          <span lang="en">Share using color blind mode colors</span>
+          <span lang="de">Mit Farben aus dem Farbenblind-Modus teilen</span>
+          <span lang="es">Compartir con colores optimizados para el daltonismo</span>
+        </label>
+      </div>
+
+      <div id="credits">
+        <p id="discord" class="hidden">
+          <span lang="pt-BR">Entre no nosso </span>
+          <span lang="en">Join our </span>
+          <span><a href="http://discord.dungleon.com/" target="_blank">Discord <svg style="fill:#be4fae; height:18px; width:18px;" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"><path d="M18.942 5.556a16.299 16.299 0 0 0-4.126-1.297c-.178.321-.385.754-.529 1.097a15.175 15.175 0 0 0-4.573 0 11.583 11.583 0 0 0-.535-1.097 16.274 16.274 0 0 0-4.129 1.3c-2.611 3.946-3.319 7.794-2.965 11.587a16.494 16.494 0 0 0 5.061 2.593 12.65 12.65 0 0 0 1.084-1.785 10.689 10.689 0 0 1-1.707-.831c.143-.106.283-.217.418-.331 3.291 1.539 6.866 1.539 10.118 0 .137.114.277.225.418.331-.541.326-1.114.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595c.415-4.396-.709-8.209-2.973-11.589zM8.678 14.813c-.988 0-1.798-.922-1.798-2.045s.793-2.047 1.798-2.047 1.815.922 1.798 2.047c.001 1.123-.793 2.045-1.798 2.045zm6.644 0c-.988 0-1.798-.922-1.798-2.045s.793-2.047 1.798-2.047 1.815.922 1.798 2.047c0 1.123-.793 2.045-1.798 2.045z"/></svg></a></span>
+        </p>
+
+        <p lang="pt-BR">dungleon é um wordle-like por <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> e <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a></p>
+        <p lang="en">dungleon is a wordle-like by <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> & <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a></p>
+	      <p lang="de">Dungleon wurde von Wordle inspiriert und von <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> & <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a> entwickelt.<br>Deutsche Übersetzung von <a href="https://twitter.com/DommeFridge" target="_blank">@DommeFridge</a>.</p>
+        <p lang="es">dungleon está inspirado en Wordle y ha sido desarrollado <br>por <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> y <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a>.<br>Localización a español por <strong>Eanok</strong>.</p>
+      </div>
+
+    </div></div>
+
+    <!-- END RESULTS SCREEN -->
+
+
+    <!-- BEGIN SETTINGS SCREEN -->
+
+    <div id="settings-container" class="overlay-container hidden"><div id="settings" class="overlay">
+      <div>
+        <h2 lang="pt-BR">Configurar</h2>
+        <h2 lang="en">Settings</h2>
+        <h2 lang="de">Einstellungen</h2>
+        <h2 lang="es">Configuración</h2>
+      </div>
+
+      <div class="setting-element">
+        <p class="label">
+          <span lang="pt-BR" class="label">idioma</span>
+          <span lang="en" class="label">language</span>
+	        <span lang="de" class="label">Sprache</span>
+          <span lang="es" class="label">idioma</span>
+        </p>
+        <div class="options-container">
+          <button id="language-portuguese-button">Português</button>
+          <button id="language-english-button">English</button>
+	        <button id="language-german-button">Deutsch</button>
+          <button id="language-spanish-button">Español</button>
+          <p style="margin-top: 2px;"><small>
+            <span lang="pt-BR">Localização para alemão por </span>
+            <span lang="en">German localization by </span>
+            <span lang="de">Deutsche Übersetzung von </span>
+            <span lang="es">Localización a alemán por </span>
+            <a href="https://twitter.com/DommeFridge" target="_blank">@DommeFridge</a>.
+            <br>
+            <span lang="pt-BR">Localização para espanhol por </span>
+            <span lang="en">Spanish localization by </span>
+            <span lang="de">Spanische Übersetzung von </span>
+            <span lang="es">Localización a español por </span>
+            <strong>Eanok</strong>.
+          </small></p>
+        </div>
+      </div>
+
+      <div class="setting-element">
+        <p class="label">
+          <span lang="pt-BR" class="label">cores otimizadas para daltonismo</span>
+          <span lang="en" class="label">color blind mode</span>
+          <span lang="de" class="label">Farbenblind-Modus</span>
+          <span lang="es" class="label">Modo daltónico</span>
+        </p>
+        <button id="colorblind-button">
+          <div class="options-container">
+            <span lang="pt-BR">Ativar/Desativar</span>
+            <span lang="en">Toggle</span>
+            <span lang="de">Umschalten</span>
+            <span lang="es">Activar/Desactivar</span>
+          </div>
+        </button>
+      </div>
+
+      <div class="setting-element">
+        <p class="label">
+          <span lang="pt-BR" class="label">modo escuro</span>
+          <span lang="en" class="label">dark mode</span>
+          <span lang="de" class="label">Dunkler Modus</span>
+          <span lang="es" class="label">Modo oscuro</span>
+        </p>
+        <button id="dark-mode-button">
+          <div class="options-container">
+            <span lang="pt-BR">Ativar/Desativar</span>
+            <span lang="en">Toggle</span>
+            <span lang="de">Umschalten</span>
+            <span lang="es">Activar/Desactivar</span>
+          </div>
+        </button>
+      </div>
+
+
+      <div id="credits-settings">
+        <p lang="pt-BR">dungleon é um wordle-like por <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> e <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a></p>
+        <p lang="en">dungleon is a wordle-like by <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> & <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a></p>
+	      <p lang="de">Dungleon wurde von Wordle inspiriert und von <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <br><a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> & <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a> entwickelt.</p>
+        <p lang="es">dungleon está inspirado en Wordle y ha sido desarrollado <br>por <a href="https://twitter.com/lipedal" target="_blank">@lipedal</a>, <a href="https://twitter.com/brunoruchiga" target="_blank">@brunoruchiga</a> y <a href="https://twitter.com/clementdussol" target="_blank">@clementdussol</a>.</p>
+      </div>
+
+
+    </div></div>
+
+    <!-- END SETTINGS SCREEN -->
+
+    <div id="debug-container"></div>
+
+    <!-- <script src="client.js"></script> -->
+    <script src="/js/client.js?v=20230619"></script>
+  </body>
+</html>
